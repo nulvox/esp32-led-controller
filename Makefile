@@ -3,7 +3,7 @@ PROFILE ?= release
 IMAGE := esp32-led-controller-builder:local
 PORT ?= /dev/ttyUSB0
 
-.PHONY: image cache-init build debug release test preview clean flash flashfs monitor
+.PHONY: image cache-init build debug release lint test preview clean flash flashfs monitor
 
 image:
 	docker build -t $(IMAGE) .
@@ -33,6 +33,9 @@ debug:
 
 release:
 	@:
+
+lint:
+	python3 tools/lint.py
 
 test: cache-init
 	docker run --rm -u "$$(id -u):$$(id -g)" \
