@@ -17,23 +17,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  zizmor:
+    name: Audit GitHub Actions workflows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read # lets zizmor inspect workflow/action metadata during online audits
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Run zizmor
+        uses: zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482 # v0.6.4
+        with:
+          advanced-security: false
+
   test:
     name: Test and debug build
+    needs: zizmor
     if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
-
-      - name: Restore PlatformIO cache
-        uses: actions/cache@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          path: |
-            build-cache/platformio
-            .pio
-          key: platformio-${{ runner.os }}-${{ hashFiles('platformio.ini', 'Dockerfile') }}
-          restore-keys: |
-            platformio-${{ runner.os }}-
+          persist-credentials: false
 
       - name: Lint project content
         run: make lint
@@ -43,7 +53,7 @@ jobs:
 
       - name: Upload debug artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: debug-build
           if-no-files-found: ignore
@@ -53,25 +63,17 @@ jobs:
 
   release:
     name: Build and publish release
+    needs: zizmor
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write # needed for gh release create to publish tagged artifacts
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
-
-      - name: Restore PlatformIO cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            build-cache/platformio
-            .pio
-          key: platformio-${{ runner.os }}-${{ hashFiles('platformio.ini', 'Dockerfile') }}
-          restore-keys: |
-            platformio-${{ runner.os }}-
+          persist-credentials: false
 
       - name: Build release firmware and filesystem
         run: make build
