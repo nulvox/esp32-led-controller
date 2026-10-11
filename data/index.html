@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LED Controller</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/htmx.min.js"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>LED Controller</h1>
+      <p>Commands are applied to the physical LED immediately.</p>
+    </header>
+
+    <section class="card">
+      <form hx-post="/led/power" hx-target="#command-status" hx-swap="innerHTML">
+        <label class="switch-label">
+          <input type="checkbox" name="enabled" value="1" role="switch">
+          LED enabled
+        </label>
+      </form>
+
+      <form hx-post="/led/mode" hx-trigger="change" hx-target="#blink-controls" hx-swap="outerHTML">
+        <fieldset>
+          <legend>Mode</legend>
+          <label>
+            <input type="radio" name="mode" value="solid" checked>
+            Solid
+          </label>
+          <label>
+            <input type="radio" name="mode" value="blink">
+            Blink
+          </label>
+        </fieldset>
+      </form>
+
+      <div id="blink-controls"></div>
+      <p id="command-status" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+</body>
+</html>

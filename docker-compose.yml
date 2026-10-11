@@ -1,0 +1,13 @@
+services:
+  build:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: esp32-led-controller-builder:local
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - ./build-cache/platformio:/opt/platformio
+    # Uncomment and pass a serial device to use make flash, for example:
+    # devices:
+    #   - /dev/ttyUSB0:/dev/ttyUSB0

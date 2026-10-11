@@ -1,0 +1,4 @@
+.pio/
+build-cache/platformio/
+*.pyc
+__pycache__/
