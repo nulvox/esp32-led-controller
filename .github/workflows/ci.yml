@@ -4,6 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   push:
+    branches:
+      - main
     tags:
       - 'v*.*.*'
 
@@ -17,7 +19,7 @@ concurrency:
 jobs:
   test:
     name: Test and debug build
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     steps:
       - name: Check out source
@@ -32,6 +34,9 @@ jobs:
           key: platformio-${{ runner.os }}-${{ hashFiles('platformio.ini', 'Dockerfile') }}
           restore-keys: |
             platformio-${{ runner.os }}-
+
+      - name: Lint project content
+        run: make lint
 
       - name: Run tests and debug build
         run: make test
