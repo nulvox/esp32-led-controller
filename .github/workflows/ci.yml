@@ -42,16 +42,8 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-
-      - name: Restore PlatformIO cache
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
-          path: |
-            build-cache/platformio
-            .pio
-          key: platformio-${{ runner.os }}-${{ hashFiles('platformio.ini', 'Dockerfile') }}
-          restore-keys: |
-            platformio-${{ runner.os }}-
+          persist-credentials: false
 
       - name: Lint project content
         run: make lint
@@ -81,16 +73,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
-
-      - name: Restore PlatformIO cache
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
-        with:
-          path: |
-            build-cache/platformio
-            .pio
-          key: platformio-${{ runner.os }}-${{ hashFiles('platformio.ini', 'Dockerfile') }}
-          restore-keys: |
-            platformio-${{ runner.os }}-
+          persist-credentials: false
 
       - name: Build release firmware and filesystem
         run: make build
