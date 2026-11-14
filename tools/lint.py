@@ -61,7 +61,7 @@ if parser.errors:
 if parser.controls < 3:
     fail("expected at least three interactive controls")
 
-for endpoint in ("/led/power", "/led/mode", "/led/blink-delay"):
+for endpoint in ("/led/power", "/led/mode", "/led/blink-delay", "/led/pattern", "/led/morse"):
     if endpoint not in html and endpoint not in (ROOT / "src/main.cpp").read_text():
         fail(f"endpoint is not wired: {endpoint}")
 
