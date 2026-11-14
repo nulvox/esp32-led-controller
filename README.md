@@ -34,24 +34,14 @@ For the simplest single-LED setup, wire **GPIO25 → current-limiting resistor �
 
 The browser interface is served from the ESP32's LittleFS filesystem and uses htmx to exchange small HTML fragments rather than reloading the page.
 
-```text
-┌──────────────────────── LED Controller ────────────────────────┐
-│ Commands are applied to the physical LED immediately.          │
-│                                                                │
-│ [ ] LED enabled                                                │
-│                                                                │
-│ Mode:  (●) Solid   ( ) Blink   ( ) Discrete pattern            │
-│        ( ) Morse code                                          │
-│                                                                │
-│  • Blink reveals a 50–2000 ms delay slider.                    │
-│  • Discrete pattern adds a preset selector (Double, Triple,    │
-│    Heartbeat, Beacon, Strobe burst, SOS) + unit delay slider.  │
-│  • Morse code adds a text message box with live dot/dash       │
-│    translation + dot unit delay slider.                        │
-│                                                                │
-│ Status: LED on / Pattern set / Morse set / Delay set           │
-└────────────────────────────────────────────────────────────────┘
-```
+![LED Controller Web UI in Morse code mode](UI.png)
+
+Selecting a mode swaps in the relevant controls dynamically:
+
+- **Solid:** steady output when the LED is enabled.
+- **Blink:** reveals the 50–2000 ms blink delay slider.
+- **Discrete pattern:** reveals the preset selector (`Double blink`, `Triple blink`, `Heartbeat`, `Beacon`, `Strobe burst`, `SOS`) and step unit delay slider.
+- **Morse code:** reveals the message input (`A–Z`, `0–9`, common punctuation), live dot/dash preview, and dot unit delay slider (shown above).
 
 ## Build in Docker
 
