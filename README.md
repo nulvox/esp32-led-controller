@@ -3,8 +3,10 @@
 A small htmx-based web UI for a classic ESP32. It provides:
 
 - On/off control
-- Solid/blink mode
-- A blink-delay slider shown only in blink mode
+- Solid, steady blink, discrete pattern, and custom Morse code modes
+- Preset discrete patterns (double blink, triple blink, heartbeat, beacon, strobe burst, and SOS)
+- Custom Morse code input (`A–Z`, `0–9`, common punctuation) with live dot/dash preview and standard ITU-R timing (1x dot, 3x dash, 1x intra-character gap, 3x letter gap, 7x word/repeat gap)
+- A conditional unit/blink-delay slider (50–2000 ms) shown for all non-solid modes
 - Small HTML responses from the ESP32 for fast command acknowledgement
 
 The LED output uses the ESP32's DAC1 on **GPIO25**. Connect an LED through a suitable current-limiting resistor. For a high-power LED or LED strip, use GPIO25 to drive an appropriate transistor/MOSFET circuit instead of driving the load directly. GPIO26 (DAC2) is also available on classic ESP32 boards, but is not used here.
@@ -38,10 +40,16 @@ The browser interface is served from the ESP32's LittleFS filesystem and uses ht
 │                                                                │
 │ [ ] LED enabled                                                │
 │                                                                │
-│ Mode:  (●) Solid   ( ) Blink                                   │
-│         Blink mode reveals a 50–2000 ms delay slider.          │
+│ Mode:  (●) Solid   ( ) Blink   ( ) Discrete pattern            │
+│        ( ) Morse code                                          │
 │                                                                │
-│ Status: LED on / LED off / Blink delay set                     │
+│  • Blink reveals a 50–2000 ms delay slider.                    │
+│  • Discrete pattern adds a preset selector (Double, Triple,    │
+│    Heartbeat, Beacon, Strobe burst, SOS) + unit delay slider.  │
+│  • Morse code adds a text message box with live dot/dash       │
+│    translation + dot unit delay slider.                        │
+│                                                                │
+│ Status: LED on / Pattern set / Morse set / Delay set           │
 └────────────────────────────────────────────────────────────────┘
 ```
 
